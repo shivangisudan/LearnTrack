@@ -1,6 +1,6 @@
 # LearnTrack
 
-LearnTrack is my Core Java project for managing students, courses and enrollments from the terminal. I used it to practise classes, inheritance, constructors, ArrayLists and exception handling.
+LearnTrack is my Core Java project as a part of Airtribe's FDE Course for managing students, courses and enrollments from the terminal. I used it to practise classes, inheritance, constructors, ArrayLists and exception handling.
 
 Everything is stored in memory, so closing the app clears the records and resets the IDs.
 
