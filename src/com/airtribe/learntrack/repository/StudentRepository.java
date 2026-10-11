@@ -5,17 +5,17 @@ import java.util.ArrayList;
 public class StudentRepository {
     private ArrayList<Student> students = new ArrayList<>();
 
-    //add students to the array
+    //add students to the list
     public void addStudent(Student student) {
         students.add(student);
     }
 
-    //get ALL students in the array
+    //get all students in the list
     public ArrayList<Student> getAllStudents() {
         return new ArrayList<>(students);
     }
 
-    //Find a Student by their ID
+    //find a student by ID
     public Student findStudentByID(int id) {
         for (Student student : students) {
             if (student.getId() == id) {

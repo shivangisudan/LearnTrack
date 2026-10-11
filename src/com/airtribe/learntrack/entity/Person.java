@@ -31,7 +31,7 @@ public class Person {
         return email;
     }
 
-    // setters
+    //setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
