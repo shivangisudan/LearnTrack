@@ -18,20 +18,19 @@ public class EnrollmentRepository {
     //find an enrollment by its ID
     public Enrollment getEnrollmentById(int id) {
         for (Enrollment enrollment : enrollments) {
-            if (enrollment.getId() == id){
+            if (enrollment.getId() == id) {
                 return enrollment;
             }
         }
         return null;
     }
 
-    //find student's enrollments by ID
-
-    public ArrayList<Enrollment> findByStudentID(int studentID){
+    //find a student's enrollments
+    public ArrayList<Enrollment> findByStudentID(int studentID) {
         ArrayList<Enrollment> results = new ArrayList<>();
 
         for (Enrollment enrollment : enrollments) {
-            if (enrollment.getStudentID() == studentID){
+            if (enrollment.getStudentID() == studentID) {
                 results.add(enrollment);
             }
         }

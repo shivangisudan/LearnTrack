@@ -3,13 +3,14 @@ package com.airtribe.learntrack.service;
 import com.airtribe.learntrack.entity.Course;
 import com.airtribe.learntrack.entity.Enrollment;
 import com.airtribe.learntrack.entity.Student;
+import com.airtribe.learntrack.enums.EnrollmentStatus;
 import com.airtribe.learntrack.exception.EntityNotFoundException;
 import com.airtribe.learntrack.repository.EnrollmentRepository;
 import com.airtribe.learntrack.util.IDGenerator;
 
 import java.util.ArrayList;
 
-//checks enrollment rules and uses the repository to store enrollments
+//enrollment management
 public class EnrollmentService {
     private StudentService studentService;
     private CourseService courseService;
@@ -24,12 +25,12 @@ public class EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
     }
 
-    //validate the student and course, then create an enrollment
+    //enroll a student in a course
     public Enrollment enrollStudent(int studentId, int courseId) {
         Student student = studentService.getStudentById(studentId);
         Course course = courseService.getCourseById(courseId);
 
-        //inactive students and courses cannot receive new enrollments
+        //check that both records are active
         if (!student.isActive()) {
             throw new IllegalArgumentException("Student is inactive");
         }
@@ -38,11 +39,11 @@ public class EnrollmentService {
             throw new IllegalArgumentException("Course is inactive");
         }
 
-        //prevent duplicate active enrollments for the same student and course
+        //check for an active enrollment in the same course
         for (Enrollment enrollment :
                 enrollmentRepository.findByStudentID(studentId)) {
             if (enrollment.getCourseID() == courseId
-                    && "ACTIVE".equals(enrollment.getStatus())) {
+                    && enrollment.getStatus() == EnrollmentStatus.ACTIVE) {
                 throw new IllegalArgumentException(
                         "Student is already enrolled in this course"
                 );
@@ -59,7 +60,7 @@ public class EnrollmentService {
         return enrollment;
     }
 
-    //find an enrollment by ID and handle a missing enrollment
+    //find enrollment by ID & error handling
     public Enrollment getEnrollmentById(int id) {
         Enrollment enrollment = enrollmentRepository.getEnrollmentById(id);
 
@@ -72,16 +73,16 @@ public class EnrollmentService {
         return enrollment;
     }
 
-    //check that the student exists, then list their enrollments
+    //list a student's enrollments
     public ArrayList<Enrollment> getEnrollmentsForStudent(int studentId) {
         studentService.getStudentById(studentId);
         return enrollmentRepository.findByStudentID(studentId);
     }
 
     //complete or cancel an active enrollment
-    public void updateEnrollmentStatus(int id, String status) {
-        //accept only the two supported final statuses
-        if (!"COMPLETED".equals(status) && !"CANCELLED".equals(status)) {
+    public void updateEnrollmentStatus(int id, EnrollmentStatus status) {
+        //check the requested status
+        if (status != EnrollmentStatus.COMPLETED && status != EnrollmentStatus.CANCELLED) {
             throw new IllegalArgumentException(
                     "Status must be COMPLETED or CANCELLED"
             );
@@ -89,8 +90,8 @@ public class EnrollmentService {
 
         Enrollment enrollment = getEnrollmentById(id);
 
-        //completed or cancelled enrollments cannot be changed again
-        if (!"ACTIVE".equals(enrollment.getStatus())) {
+        //only active enrollments can change status
+        if (enrollment.getStatus() != EnrollmentStatus.ACTIVE) {
             throw new IllegalArgumentException(
                     "Only active enrollments can be completed or cancelled"
             );

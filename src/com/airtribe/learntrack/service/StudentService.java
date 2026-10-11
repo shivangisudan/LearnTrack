@@ -1,4 +1,5 @@
 package com.airtribe.learntrack.service;
+
 import com.airtribe.learntrack.entity.Student;
 import com.airtribe.learntrack.exception.EntityNotFoundException;
 import com.airtribe.learntrack.repository.StudentRepository;
@@ -7,9 +8,10 @@ import com.airtribe.learntrack.util.InputValidator;
 
 import java.util.ArrayList;
 
-//uses repository to find a student and decide what happens if ID doesn't exist
+//student management
 public class StudentService {
     private StudentRepository studentRepository;
+    //constructor
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
@@ -22,15 +24,20 @@ public class StudentService {
         InputValidator.requireNonBlank(batch, "Batch");
         InputValidator.requireValidEmail(email);
 
-
         Student student = new Student(
-                IDGenerator.getNextStudentId(), firstName, lastName, email, batch
+                IDGenerator.getNextStudentId(), firstName.trim(), lastName.trim(),
+                email.trim(), batch.trim()
         );
         studentRepository.addStudent(student);
         return student;
     }
 
-    // update students
+    //add a student without email
+    public Student addStudent(String firstName, String lastName, String batch) {
+        return addStudent(firstName, lastName, "", batch);
+    }
+
+    //update student details
     public void updateStudent(int id, String firstName, String lastName, String email, String batch) {
         //validators
         InputValidator.requireNonBlank(firstName, "First name");
@@ -38,12 +45,11 @@ public class StudentService {
         InputValidator.requireNonBlank(batch, "Batch");
         InputValidator.requireValidEmail(email);
 
-
         Student student = getStudentById(id);
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        student.setEmail(email);
-        student.setBatch(batch);
+        student.setFirstName(firstName.trim());
+        student.setLastName(lastName.trim());
+        student.setEmail(email.trim());
+        student.setBatch(batch.trim());
     }
 
     //list all students
@@ -56,7 +62,7 @@ public class StudentService {
         Student student = studentRepository.findStudentByID(id);
 
         if (student == null) {
-            throw new  EntityNotFoundException("Student with ID " + id + " not found");
+            throw new EntityNotFoundException("Student with ID " + id + " not found");
         }
         return student;
     }

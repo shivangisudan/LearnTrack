@@ -10,7 +10,7 @@ public class CourseRepository {
         courses.add(course);
     }
 
-    //get all courses in the array
+    //get all courses in the list
     public ArrayList<Course> getCourses() {
         return new ArrayList<>(courses);
     }

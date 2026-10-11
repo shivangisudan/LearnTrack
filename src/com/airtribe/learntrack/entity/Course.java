@@ -4,7 +4,7 @@ public class Course {
     private int id;
     private String courseName;
     private String courseDescription;
-    private int courseDuration;
+    private int courseDuration; //in weeks
     private boolean active;
 
     //constructor
@@ -46,7 +46,8 @@ public class Course {
     public void setActive(boolean active) {
         this.active = active;
     }
-    public String getCourseDetails(){
+    //display course details
+    public String getCourseDetails() {
         return id + " " + courseName + " " + courseDescription + " " + courseDuration;
     }
 }

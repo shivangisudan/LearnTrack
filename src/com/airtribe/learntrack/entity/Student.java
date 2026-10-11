@@ -4,12 +4,13 @@ public class Student extends Person {
     private String batch;
     private boolean active;
 
-    // constructor
+    //constructor
     public Student(int id, String firstName, String lastName, String email, String batch) {
         super(id, firstName, lastName, email);
         this.batch = batch;
         this.active = true;
-        }
+    }
+    //constructor without email
     public Student(int id, String firstName, String lastName, String batch) {
         this(id, firstName, lastName, "", batch);
     }
@@ -22,7 +23,7 @@ public class Student extends Person {
         return active;
     }
 
-    // setters
+    //setters
     public void setActive(boolean active) {
         this.active = active;
     }

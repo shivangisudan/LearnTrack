@@ -8,7 +8,7 @@ import com.airtribe.learntrack.util.InputValidator;
 
 import java.util.ArrayList;
 
-//uses repository to manage courses and handle missing IDs
+//course management
 public class CourseService {
     private CourseRepository courseRepository;
 
@@ -17,7 +17,7 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    //AddCourse - validate details, create a course and store it
+    //add a course
     public Course addCourse(String courseName, String courseDescription,
                             int courseDuration) {
         InputValidator.requireNonBlank(courseName, "Course name");
@@ -26,8 +26,8 @@ public class CourseService {
 
         Course course = new Course(
                 IDGenerator.getNextCourseId(),
-                courseName,
-                courseDescription,
+                courseName.trim(),
+                courseDescription.trim(),
                 courseDuration
         );
 
@@ -35,7 +35,7 @@ public class CourseService {
         return course;
     }
 
-    //find a course by ID and handle a missing course
+    //find course by ID & error handling
     public Course getCourseById(int id) {
         Course course = courseRepository.findCourseByID(id);
 
