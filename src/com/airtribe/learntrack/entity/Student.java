@@ -10,6 +10,9 @@ public class Student extends Person {
         this.batch = batch;
         this.active = true;
         }
+    public Student(int id, String firstName, String lastName, String batch) {
+        this(id, firstName, lastName, "", batch);
+    }
 
     //getters
     public String getBatch() {

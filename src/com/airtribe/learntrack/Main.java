@@ -1,10 +1,14 @@
 package com.airtribe.learntrack;
 
-import com.airtribe.learntrack.entity.Student;
+import com.airtribe.learntrack.entity.Enrollment;
 
 public class Main {
     public static void main(String[] args) {
-        Student student = new Student(1, "Asha", "Rao","asharao@gmail.com","Java01");
-        System.out.println(student.getDisplayName());
+        Enrollment enrollment = new Enrollment(1, 1, 101);
+        System.out.println(enrollment.getEnrollmentDate());
+        System.out.println(enrollment.getStatus());
+
+        enrollment.setStatus("COMPLETED");
+        System.out.println(enrollment.getStatus());
     }
 }
