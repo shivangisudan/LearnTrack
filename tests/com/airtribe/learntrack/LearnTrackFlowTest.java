@@ -60,6 +60,7 @@ public class LearnTrackFlowTest {
         check(second.getEmail().isEmpty(), "service overload allows no email");
         check(student.getId() == 1 && second.getId() == 2, "student IDs increase after validation");
         check(student.getFirstName().equals("Asha"), "student details trimmed");
+        check(student.getEmail().equals("asha@example.com"), "surrounding email spaces removed on add");
         check(students.getStudentById(student.getId()) == student, "lookup returns stored object");
         try {
             students.getStudentById(999);
@@ -80,6 +81,8 @@ public class LearnTrackFlowTest {
             checks++;
         }
         check(student.getFirstName().equals("Asha"), "invalid update leaves object unchanged");
+        students.updateStudent(student.getId(), "Asha", "Rao", " asha@example.com ", "Java-01");
+        check(student.getEmail().equals("asha@example.com"), "surrounding email spaces removed on update");
         students.updateStudent(student.getId(), "Asha", "Shah", "", "Java-02");
         check(student.getLastName().equals("Shah") && student.getBatch().equals("Java-02"), "valid update saved");
         ArrayList<Student> studentCopy = students.getAllStudents();
@@ -109,6 +112,18 @@ public class LearnTrackFlowTest {
             fail("blank course description accepted");
         } catch (IllegalArgumentException expected) {
             checks++;
+        }
+        try {
+            courses.addCourse(null, "Basics", 8);
+            fail("null course name accepted");
+        } catch (IllegalArgumentException expected) {
+            check(expected.getMessage().equals("Course name cannot be blank"), "null course name has a clear error");
+        }
+        try {
+            courses.addCourse("Java", null, 8);
+            fail("null course description accepted");
+        } catch (IllegalArgumentException expected) {
+            check(expected.getMessage().equals("Course description cannot be blank"), "null course description has a clear error");
         }
         Course course = courses.addCourse(" Core Java ", " Java fundamentals ", 8);
         Course otherCourse = courses.addCourse("OOP", "Object orientation", 4);
@@ -160,10 +175,16 @@ public class LearnTrackFlowTest {
             checks++;
         }
 
+        LocalDate beforeEnrollment = LocalDate.now();
         Enrollment enrollment = enrollments.enrollStudent(student.getId(), course.getId());
+        LocalDate afterEnrollment = LocalDate.now();
         check(enrollment.getId() == 1, "rejected enrollments do not consume IDs");
         check(enrollment.getStudentID() == student.getId() && enrollment.getCourseID() == course.getId(), "IDs link enrollment correctly");
-        check(enrollment.getEnrollmentDate().equals(LocalDate.now()), "enrollment dated today");
+        //allow creation to cross midnight
+        LocalDate enrollmentDate = enrollment.getEnrollmentDate();
+        check(enrollmentDate != null
+                && !enrollmentDate.isBefore(beforeEnrollment)
+                && !enrollmentDate.isAfter(afterEnrollment), "enrollment date matches creation period");
         check(enrollment.getStatus() == EnrollmentStatus.ACTIVE, "enrollment starts active");
         try {
             enrollments.enrollStudent(student.getId(), course.getId());
