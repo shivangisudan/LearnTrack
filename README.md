@@ -147,12 +147,3 @@ sh test.sh
 ```
 
 These cover adding and finding records, updating students, invalid input and enrollment rules. There are also manual menu checks in [Testing.md](docs/Testing.md).
-
-## More notes
-
-- [Java setup and compilation](docs/Setup_Instructions.md)
-- [JDK, JRE and JVM basics](docs/JVM_Basics.md)
-- [Design notes](docs/Design_Notes.md)
-- [Code walkthrough](docs/Code_Walkthrough.md)
-- [Assignment checklist](docs/Requirements_Checklist.md)
-- [GitHub and pull request submission steps](docs/Submission_Guide.md)
