@@ -137,13 +137,3 @@ classDiagram
         CANCELLED
     }
 ```
-
-## Tests
-
-Run the checks from the project folder:
-
-```sh
-sh test.sh
-```
-
-These cover adding and finding records, updating students, invalid input and enrollment rules. There are also manual menu checks in [Testing.md](docs/Testing.md).
